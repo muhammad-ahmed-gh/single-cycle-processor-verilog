@@ -1,0 +1,5 @@
+{
+  "code-runner.executorMap": {
+    "verilog": "cd $dir && iverilog -o sim.out testBench.v src/*.v && vvp sim.out"
+  }
+}

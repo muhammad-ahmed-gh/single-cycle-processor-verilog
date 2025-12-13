@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 module ALU(
   input [63: 0] a, b,
   input [3: 0] ALUControl,

@@ -1,3 +1,16 @@
+// ALU & Arithmetic Logic Design
+// You will design and implement the Arithmetic Logic Unit (ALU), which must 
+// support: 
+// • add, sub, 
+// • and, or, xor, 
+// • sll, srl ….etc 
+
+// Your responsibilities: 
+// • Derive ALU operation codes 
+// • Implement ALU behavior in Verilog 
+// • Ensure correct outputs for all R-type and shift operations 
+// • Provide an individual testbench that proves correct ALU operation
+
 module ALU(
   input [63: 0] a, b,
   input [3: 0] ALUControl,

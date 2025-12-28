@@ -13,7 +13,7 @@
 // • Ensure correct outputs for all R-type and shift operations
 // • Provide an individual testbench that proves correct ALU operation
 
-module alu(
+module ALU(
   input [63: 0] a, b,
   input [3: 0] ALUControl,
   output reg [63: 0] result,

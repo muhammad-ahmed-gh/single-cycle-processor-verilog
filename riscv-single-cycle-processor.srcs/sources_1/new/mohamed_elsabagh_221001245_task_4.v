@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module pc (
+module PC (
     input  wire        clk,
     input  wire        reset,
     input  wire        PCWrite,

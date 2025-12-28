@@ -25,7 +25,7 @@
 // • Run the full-core simulation
 // • Run RISC-V program to test the processor
 
-module data_memory (
+module DataMemory (
 
 );
 

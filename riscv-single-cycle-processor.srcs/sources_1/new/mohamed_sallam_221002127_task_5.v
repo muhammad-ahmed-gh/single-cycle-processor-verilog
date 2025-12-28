@@ -71,7 +71,25 @@ module Top (
 );
 
   InstructionMemory instr_mem_unit (
-    
+    .addr(),
+    .instr()
+  );
+
+  DataMemory data_mem_unit (
+    .clk(),
+    .addr(),
+    .writeData(),
+    .memRead(),
+    .memWrite(),
+    .readData()
+  );
+
+  PC pc_unit (
+    .clk(),
+    .reset(),
+    .PCWrite(),
+    .PC_in(),
+    .PC_out()
   );
 
   ALU alu_unit(
@@ -81,6 +99,35 @@ module Top (
     .result()
     .carryOut()
     .zero()
+  );
+
+  ControlUnit cu_unit (
+    .opcode(),
+    .funct3(),
+    .funct7(),
+    .RegWrite(),
+    .MemWrite(),
+    .MemRead(),
+    .ALUSrc(),
+    .MemToReg(),
+    .Branch(),
+    .ALUControl()
+  );
+
+  RegisterFile register_file_unit (
+    .clk(),
+    .RegWrite(),
+    .read_reg1(),
+    .read_reg2(),
+    .write_reg(),
+    .write_data(),
+    .read_data1(),
+    .read_data2()
+  );
+
+  ImmGen imm_gen_unit (
+    .instruction(),
+    .imm()
   );
 
 endmodule

@@ -65,7 +65,13 @@ module RegisterFile(
   
   assign readData1 = (readReg1 == 5'd0) ? 64'd0 : registers[readReg1];
   assign readData2 = (readReg2 == 5'd0) ? 64'd0 : registers[readReg2];
-  
+
+  integer i;
+  initial begin
+    for (i = 0; i < 32; i = i + 1)
+      registers[i] = 64'd0;
+  end
+
   always @(posedge clk) begin
     if (RegWrite && writeReg != 5'd0)  // write only if RegWrite=1 and not x0
       registers[writeReg] <= writeData;

@@ -67,7 +67,7 @@ endmodule
 
 module Top (
   input clk,
-  input rst,
+  input rst
 );
 
   // wires
@@ -127,7 +127,7 @@ module Top (
   );
 
   // execute
-  assign ALUInput2 = ALUSrc ? imm : readData2;
+  assign ALUInput2 = ALUSrc ? immed : readData2;
 
   ALU alu_unit(
     .a(readData1),

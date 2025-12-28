@@ -25,15 +25,29 @@ module ImmGen(
   always @(*) begin
     case (opcode)
       // I-type: addi, andi, ori, xori, ld, slli, srli
+      // 7'b0010011, 7'b0000011: begin
+      //   imm = {{52{instruction[31]}}, instruction[31:20]};
+      // end
       7'b0010011, 7'b0000011: begin
-        imm = {{52{instruction[31]}}, instruction[31:20]};
+        if (
+          opcode == 7'b0010011 &&
+          (funct3 == 3'b001 || funct3 == 3'b101)
+        ) begin // (slli, srli)
+
+          imm = {{58{1'b0}}, instruction[25:20]};
+        end
+
+        else begin
+          imm = {{52{instruction[31]}}, instruction[31:20]}; // sign-extended
+        end
+
       end
-      
+
       // sd
       7'b0100011: begin
         imm = {{52{instruction[31]}}, instruction[31:25], instruction[11:7]};
       end
-      
+
       // beq
       7'b1100011: begin
         imm = {{51{instruction[31]}}, instruction[31], instruction[7], 

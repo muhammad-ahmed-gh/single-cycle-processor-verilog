@@ -120,7 +120,19 @@ module ControlUnit(
 
       2'b10: // R/I-type
         case(funct3)
-          3'b000: ALUControl = (funct7 == 7'b0100000) ? 4'b0110 : 4'b0010; // sub or add
+
+          3'b000: begin // add or sub
+
+            if(opcode == 7'b0110011) begin // R-type
+              ALUControl = (funct7 == 7'b0100000) ? 4'b0110 : 4'b0010; // sub/add
+            end
+
+            else begin
+              ALUControl = 4'b0010;
+            end
+
+          end
+
           3'b111: ALUControl = 4'b0000;   // and
           3'b110: ALUControl = 4'b0001;   // or
           3'b100: ALUControl = 4'b0011;   // xor

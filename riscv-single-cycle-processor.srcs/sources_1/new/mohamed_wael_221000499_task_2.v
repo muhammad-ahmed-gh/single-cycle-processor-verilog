@@ -29,7 +29,7 @@ module ControlUnit(
     output reg [1:0] ALUOp,         // ALU operation type
     output reg [3:0] ALUControl     // specific ALU operation
 );
-    
+
     always @(*) begin 
         // default values
         RegWrite = 0;
@@ -135,6 +135,3 @@ module ControlUnit(
     end
 
 endmodule
-
-// -----------------------------------------------------
-

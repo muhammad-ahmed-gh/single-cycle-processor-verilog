@@ -70,64 +70,85 @@ module Top (
   input rst // reset
 );
 
-  InstructionMemory instr_mem_unit (
-    .addr(),
-    .instr()
+  // wires
+  wire [63:0] currentPC, nextPC;
+  wire [31:0] instruction;
+  wire [63:0] readData1, readData2, writeData;
+  wire [63:0] ALUInput2, immed, ALUResult;
+  wire [63:0] memReadData;
+  wire zero, carryOut;
+
+  // control flags
+  wire  regWrite, memWrite, memRead, ALUSrc, memToReg, branch;
+  wire [3:0] ALUControl;
+
+  // loading instruction
+  InstructionMemory imem (
+    .addr(currentPC),
+    .instr(instruction)
   );
 
-  DataMemory data_mem_unit (
-    .clk(),
-    .addr(),
-    .writeData(),
-    .memRead(),
-    .memWrite(),
-    .readData()
+  // decode
+  ControlUnit cu (
+    .opcode(instruction[6:0]),
+    .funct3(instr[14:12]),
+    .funct7(instr[31:25]),
+    .RegWrite(regWrite),
+    .MemWrite(memWrite),
+    .MemRead(memRead),
+    .ALUSrc(ALUSrc),
+    .MemToReg(memToReg),
+    .Branch(branch),
+    .ALUControl(ALUControl)
   );
 
-  PC pc_unit (
-    .clk(),
-    .reset(),
-    .PCWrite(),
-    .PC_in(),
-    .PC_out()
+  assign nextPC = (branch && zero)? immed : currentPC + 4;
+  PC pc (
+    .clk(clk),
+    .reset(rst),
+    .PC_in(currentPC),
+    .PC_out(nextPC)
   );
+
+  RegisterFile rf (
+    .clk(clk),
+    .RegWrite(regWrite),
+    .readReg1(instr[19:15]),
+    .readReg2(instr[24:20]),
+    .writeReg(instr[11:7]),
+    .writeData(writeData),
+    .readData1(readData1),
+    .readData2(readData2)
+  );
+
+  ImmGen imm_gen (
+    .instruction(instruction),
+    .imm(immed)
+  );
+
+  // execute
+  assign ALUInput2 = ALUSrc ? imm : readData2;
 
   ALU alu_unit(
-    .a()
-    .b()
-    .ALUControl()
-    .result()
-    .carryOut()
-    .zero()
+    .a(readData1)
+    .b(ALUInput2)
+    .ALUControl(ALUControl)
+    .result(ALUResult)
+    .carryOut(carryOut)
+    .zero(zero)
   );
 
-  ControlUnit cu_unit (
-    .opcode(),
-    .funct3(),
-    .funct7(),
-    .RegWrite(),
-    .MemWrite(),
-    .MemRead(),
-    .ALUSrc(),
-    .MemToReg(),
-    .Branch(),
-    .ALUControl()
+  // memory
+  DataMemory dm (
+    .clk(clk),
+    .addr(ALUResult),
+    .writeData(readData2),
+    .memRead(memRead),
+    .memWrite(memWrite),
+    .readData(memReadData)
   );
 
-  RegisterFile register_file_unit (
-    .clk(),
-    .RegWrite(),
-    .read_reg1(),
-    .read_reg2(),
-    .write_reg(),
-    .write_data(),
-    .read_data1(),
-    .read_data2()
-  );
 
-  ImmGen imm_gen_unit (
-    .instruction(),
-    .imm()
-  );
-
+  // write back
+  assign writeData = (memToReg)? memReadData : ALUResult;
 endmodule

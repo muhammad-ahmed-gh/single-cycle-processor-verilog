@@ -52,23 +52,23 @@ endmodule
 module RegisterFile(
   input clk,                      // clock signal
   input RegWrite,                 // 1 to write to register
-  input [4:0] read_reg1,          // address of first register to read
-  input [4:0] read_reg2,          // address of second register to read
-  input [4:0] write_reg,          // address of register to write
-  input [63:0] write_data,        // data to write
-  output [63:0] read_data1,       // data from first register
-  output [63:0] read_data2        // data from second register
+  input [4:0] readReg1,          // address of first register to read
+  input [4:0] readReg2,          // address of second register to read
+  input [4:0] writeReg,          // address of register to write
+  input [63:0] writeData,        // data to write
+  output [63:0] readData1,       // data from first register
+  output [63:0] readData2        // data from second register
 );
 
   // 32 registers, each 64 bits wide
   reg [63:0] registers [31:0];
   
-  assign read_data1 = (read_reg1 == 5'd0) ? 64'd0 : registers[read_reg1];
-  assign read_data2 = (read_reg2 == 5'd0) ? 64'd0 : registers[read_reg2];
+  assign readData1 = (readReg1 == 5'd0) ? 64'd0 : registers[readReg1];
+  assign readData2 = (readReg2 == 5'd0) ? 64'd0 : registers[readReg2];
   
   always @(posedge clk) begin
-    if (RegWrite && write_reg != 5'd0)  // write only if RegWrite=1 and not x0
-      registers[write_reg] <= write_data;
+    if (RegWrite && writeReg != 5'd0)  // write only if RegWrite=1 and not x0
+      registers[writeReg] <= writeData;
   end
 
 endmodule

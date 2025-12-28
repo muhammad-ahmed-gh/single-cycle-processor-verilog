@@ -3,7 +3,6 @@
 module PC (
   input clk,
   input reset,
-  input PCWrite,
   input [63:0] PC_in,
   output reg [63:0] PC_out
 );
@@ -11,7 +10,7 @@ module PC (
   always @(posedge clk or posedge reset) begin
     if (reset)
       PC_out <= 64'd0;
-    else if (PCWrite)
+    else
       PC_out <= PC_in;
   end
 

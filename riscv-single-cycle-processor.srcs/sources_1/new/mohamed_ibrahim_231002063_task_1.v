@@ -27,8 +27,11 @@ module ALU(
       4'b0000: result = a & b;
       4'b0001: result = a | b;
       4'b0010: {carryOut, result} = a + b;
+      4'b0011: result = a ^ b;
+      4'b0100: result = a << b[5:0];
+      4'b0101: result = a >> b[5:0];
       4'b0110: {carryOut, result} = a - b;
-      4'b0111: result = (a < b);
+      // 4'b0111: result = ($signed(a) < $signed(b)) ? 64'd1 : 64'd0; // not implemented yet
       default: result = 0;
     endcase
 

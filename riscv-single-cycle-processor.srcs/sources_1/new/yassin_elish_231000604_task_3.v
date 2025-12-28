@@ -26,20 +26,21 @@ module ImmGen(
         case (opcode)
             // I-type: addi, andi, ori, xori, ld, slli, srli
             7'b0010011, 7'b0000011: begin
-                imm = {{52{instruction[31]}}, instruction[31:20]};  // sign-extend 12 bits
+                imm = {{52{instruction[31]}}, instruction[31:20]};
             end
             
-            // S-type: sd
+            // sd
             7'b0100011: begin
-                imm = {{52{instruction[31]}}, instruction[31:25], instruction[11:7]};  // sign-extend
+                imm = {{52{instruction[31]}}, instruction[31:25], instruction[11:7]};
             end
             
-            // B-type: beq
+            // beq
             7'b1100011: begin
                 imm = {{51{instruction[31]}}, instruction[31], instruction[7], 
-                       instruction[30:25], instruction[11:8], 1'b0};  // sign-extend and shift left by 1
+                      instruction[30:25], instruction[11:8], 1'b0};
+                // sign-extend and shift left by 1
             end
-            
+
             default: begin
                 imm = 64'd0;
             end

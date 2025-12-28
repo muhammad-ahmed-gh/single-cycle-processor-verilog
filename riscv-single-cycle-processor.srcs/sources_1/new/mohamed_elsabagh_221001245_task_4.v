@@ -3,15 +3,15 @@
 module PC (
   input clk,
   input reset,
-  input [63:0] PC_in,
-  output reg [63:0] PC_out
+  input [63:0] PCIn,
+  output reg [63:0] PCOut
 );
 
   always @(posedge clk or posedge reset) begin
     if (reset)
-      PC_out <= 64'd0;
+      PCOut <= 64'd0;
     else
-      PC_out <= PC_in;
+      PCOut <= PCIn;
   end
 
 endmodule

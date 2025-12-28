@@ -27,12 +27,12 @@
 
 module InstructionMemory (
   input [63:0] addr,    // same as pc
-  output [31:0] instr
+  output [31:0] instruction
 );
 
-  reg [31:0] instrs[255:0];
+  reg [31:0] instructions[255:0];
 
-  assign instr = instrs[addr[9:2]];
+  assign instruction = instructions[addr[9:2]];
 
 endmodule
 
@@ -67,7 +67,7 @@ endmodule
 
 module Top (
   input clk,
-  input rst
+  input rst,
 );
 
   // wires
@@ -85,7 +85,7 @@ module Top (
   // loading instruction
   InstructionMemory imem (
     .addr(currentPC),
-    .instr(instruction)
+    .instruction(instruction)
   );
 
   // decode
@@ -106,8 +106,8 @@ module Top (
   PC pc (
     .clk(clk),
     .reset(rst),
-    .PC_in(nextPC),
-    .PC_out(currentPC)
+    .PCIn(nextPC),
+    .PCOut(currentPC)
   );
 
   RegisterFile rf (

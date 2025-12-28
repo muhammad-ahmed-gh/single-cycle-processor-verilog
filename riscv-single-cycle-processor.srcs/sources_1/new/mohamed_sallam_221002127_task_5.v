@@ -30,7 +30,7 @@ module InstructionMemory (
   output [31:0] instr
 );
 
-  reg [31:0] intrs[255:0];
+  reg [31:0] instrs[255:0];
 
   assign instr = instrs[addr[9:2]];
 
@@ -67,7 +67,7 @@ endmodule
 
 module Top (
   input clk,
-  input rst // reset
+  input rst
 );
 
   // wires
@@ -91,8 +91,8 @@ module Top (
   // decode
   ControlUnit cu (
     .opcode(instruction[6:0]),
-    .funct3(instr[14:12]),
-    .funct7(instr[31:25]),
+    .funct3(instruction[14:12]),
+    .funct7(instruction[31:25]),
     .RegWrite(regWrite),
     .MemWrite(memWrite),
     .MemRead(memRead),
@@ -102,20 +102,20 @@ module Top (
     .ALUControl(ALUControl)
   );
 
-  assign nextPC = (branch && zero)? immed : currentPC + 4;
+  assign nextPC = (branch && zero)? currentPC + immed : currentPC + 4;
   PC pc (
     .clk(clk),
     .reset(rst),
-    .PC_in(currentPC),
-    .PC_out(nextPC)
+    .PC_in(nextPC),
+    .PC_out(currentPC)
   );
 
   RegisterFile rf (
     .clk(clk),
     .RegWrite(regWrite),
-    .readReg1(instr[19:15]),
-    .readReg2(instr[24:20]),
-    .writeReg(instr[11:7]),
+    .readReg1(instruction[19:15]),
+    .readReg2(instruction[24:20]),
+    .writeReg(instruction[11:7]),
     .writeData(writeData),
     .readData1(readData1),
     .readData2(readData2)
@@ -130,11 +130,11 @@ module Top (
   assign ALUInput2 = ALUSrc ? imm : readData2;
 
   ALU alu_unit(
-    .a(readData1)
-    .b(ALUInput2)
-    .ALUControl(ALUControl)
-    .result(ALUResult)
-    .carryOut(carryOut)
+    .a(readData1),
+    .b(ALUInput2),
+    .ALUControl(ALUControl),
+    .result(ALUResult),
+    .carryOut(carryOut),
     .zero(zero)
   );
 
